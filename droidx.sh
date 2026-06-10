@@ -124,7 +124,9 @@ main_menu() {
         echo "  5) Help"
         echo "  6) Exit"
         echo ""
-        read -p "$(echo -e ${GREEN}┌─[${RESET}${RED}DroidX${RESET}${GREEN}]─[${RESET}${YELLOW}Menu${RESET}${GREEN}]${RESET})"$'\n└──╼ ' opt
+        echo -ne "${GREEN}┌─[${RESET}${RED}DroidX${RESET}${GREEN}]─[${RESET}${YELLOW}Menu${RESET}${GREEN}]${RESET}"
+        echo -ne $'\n└──╼ '
+        read opt
 
         case $opt in
             1|2|3)
